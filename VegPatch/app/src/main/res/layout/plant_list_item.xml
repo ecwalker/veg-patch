@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    
+    <data>
+        <variable
+            name="plant"
+            type="com.growingrubies.vegpatch.data.Plant" />
+        <variable
+            name="clickListener"
+            type="com.growingrubies.vegpatch.addplant.AddPlantListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> clickListener.onClick(plant)}">
+
+        <TextView
+            android:id="@+id/plantListItem_textView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingTop="24dp"
+            android:paddingBottom="24dp"
+            android:paddingStart="24dp"
+            android:text="@{plant.name}"
+            tools:text="Basil"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    
+</layout>
