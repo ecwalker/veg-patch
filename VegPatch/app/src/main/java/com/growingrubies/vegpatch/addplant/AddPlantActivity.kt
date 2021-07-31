@@ -9,7 +9,7 @@ import androidx.lifecycle.Observer
 import com.growingrubies.vegpatch.R
 import com.growingrubies.vegpatch.data.local.PlantDatabase
 import com.growingrubies.vegpatch.databinding.ActivityAddPlantBinding
-import com.growingrubies.vegpatch.overview.PlantListener
+import com.growingrubies.vegpatch.overview.MainActivity
 import timber.log.Timber
 
 class AddPlantActivity: AppCompatActivity() {
@@ -22,14 +22,15 @@ class AddPlantActivity: AppCompatActivity() {
         Timber.i("onCreate called")
 
         val application = requireNotNull(this).application
-        val dataSource = PlantDatabase.getInstance(application).plantDatabaseDao
+        val plantDao = PlantDatabase.getInstance(application).plantDatabaseDao
+        val weatherDao = PlantDatabase.getInstance(application).weatherDatabaseDao
 
         //Set up binding and viewmodel
         binding = ActivityAddPlantBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.lifecycleOwner = this
 
-        val addPlantViewModel = AddPlantViewModel(dataSource, application)
+        val addPlantViewModel = AddPlantViewModel(plantDao, weatherDao, application)
         binding.addPlantViewModel = addPlantViewModel
 
         //Set up recyclerview
@@ -37,6 +38,7 @@ class AddPlantActivity: AppCompatActivity() {
                 id -> addPlantViewModel.onPlantClicked(id)
         })
         binding.plantListRecyclerView.adapter = adapter
+
 
         //Observe plant list from ViewModel
         addPlantViewModel.plantList.observe(this, Observer {
@@ -49,11 +51,16 @@ class AddPlantActivity: AppCompatActivity() {
         //Set up navigation extra elements (ActionBar and FAB)
         setSupportActionBar(binding.toolbar)
 
+
         //TODO: Set click listener to confirm selection and navigate to Overview Activity
-//        binding.fab.setOnClickListener {
-//            val contentIntent = Intent(applicationContext, AddPlantActivity::class.java)
-//            startActivity(contentIntent)
-//        }
+        addPlantViewModel.navigateToMainActivity.observe(this, Observer {
+            if (it) {
+                val contentIntent = Intent(applicationContext, MainActivity::class.java)
+                startActivity(contentIntent)
+            }
+        })
+
+
     }
 
     /**

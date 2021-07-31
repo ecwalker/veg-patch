@@ -14,6 +14,7 @@ import com.growingrubies.vegpatch.addplant.AddPlantActivity
 import com.growingrubies.vegpatch.data.local.PlantDatabase
 import com.growingrubies.vegpatch.data.local.PlantDatabaseDao
 import com.growingrubies.vegpatch.databinding.ActivityMainBinding
+import com.growingrubies.vegpatch.plantdetail.PlantDetailActivity
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
@@ -28,13 +29,14 @@ class MainActivity : AppCompatActivity() {
 
         val application = requireNotNull(this).application
         val dataSource = PlantDatabase.getInstance(application).plantDatabaseDao
+        val weatherDataSource = PlantDatabase.getInstance(application).weatherDatabaseDao
 
         //Set up binding and viewmodel
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.lifecycleOwner = this
 
-        val overviewViewModel = OverviewActivityViewModel(dataSource, application)
+        val overviewViewModel = OverviewActivityViewModel(dataSource, weatherDataSource, application)
         binding.overviewViewModel = overviewViewModel
 
         //Set up recyclerview
@@ -51,8 +53,15 @@ class MainActivity : AppCompatActivity() {
             } ?: Timber.i("plantList LiveData is null")
         })
 
-        //Set up navigation extra elements (ActionBar and FAB)
+        //Set up navigation elements
         setSupportActionBar(binding.toolbar)
+
+        overviewViewModel.navigateToPlantDetail.observe(this, Observer {
+            val contentIntent = Intent(applicationContext, PlantDetailActivity::class.java).apply {
+                this.putExtra("plantId", it)
+            }
+            startActivity(contentIntent)
+        })
 
         binding.fab.setOnClickListener {
             val contentIntent = Intent(applicationContext, AddPlantActivity::class.java)

@@ -4,19 +4,20 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
+import com.growingrubies.vegpatch.R
+import timber.log.Timber
 
-//@BindingAdapter("android:mapImages")
-//fun mapImages(plantList: ArrayList<String>, imgView: ImageView) {
-//    for (i in plantList) {
-//        val drawable = when (i) {
-//            "Potatoes" -> "@drawable/_01_potatos"
-//            else -> "@drawable/_01_potatos"
-//        }
-//        imgView.srcCompat = drawable
-//    }
-//
-//    //Return list of strings pointing to drawables or single one???
-//}
+@BindingAdapter("mapImages")
+fun mapImages(imgView: ImageView, plantName: String) {
+    Timber.i("mapImages called. plantName: $plantName")
+    when (plantName) {
+        "Potato" -> imgView.setImageResource(R.drawable._01_potatos)
+        "Tomato" -> imgView.setImageResource(R.drawable._00_pumpkin)
+        else -> imgView.setImageResource(R.drawable._99_basil)
+    }
+}
+
+//TODO: Tidy up here...
 //object BindingAdapters {
 //    @Suppress("UNCHECKED_CAST")
 //    @BindingAdapter("android:liveData")

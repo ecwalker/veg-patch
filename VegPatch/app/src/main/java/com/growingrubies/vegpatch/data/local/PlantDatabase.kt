@@ -6,12 +6,15 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.growingrubies.vegpatch.data.Plant
 import com.growingrubies.vegpatch.data.dto.PlantDTO
+import com.growingrubies.vegpatch.data.dto.WeatherDTO
 
-@Database(entities = [PlantDTO::class], version = 1, exportSchema = false)
+@Database(entities = [PlantDTO::class, WeatherDTO::class], version = 3, exportSchema = false)
 abstract class PlantDatabase: RoomDatabase() {
 
-    //Connect to DAO
+    //Connect to DAOs
     abstract val plantDatabaseDao: PlantDatabaseDao
+    abstract val weatherDatabaseDao: WeatherDatabaseDao
+
 
     companion object {
         /**
