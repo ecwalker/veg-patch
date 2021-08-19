@@ -30,10 +30,6 @@ class PlantDetailViewModel(val plantDao: PlantDatabaseDao,
     //Use repository instead of ViewModel directly
     private val plantRepository = PlantLocalRepository(plantDao, weatherDao)
 
-    init {
-
-    }
-
     /**
      * Functions interacting with repository for database
      */
@@ -47,13 +43,15 @@ class PlantDetailViewModel(val plantDao: PlantDatabaseDao,
                         _currentPlant.value = Plant(
                             data.id,
                             data.name,
+                            data.category,
                             data.icon,
-                            data.annual,
-                            data.frostHardy,
+                            data.isAnnual,
+                            data.isFrostHardy,
+                            data.isGreenhousePlant,
                             data.sowDate,
                             data.plantDate,
                             data.harvestDate,
-                            data.active
+                            data.isActive
                         )
                     }
                     is Result.Error -> {
@@ -66,11 +64,16 @@ class PlantDetailViewModel(val plantDao: PlantDatabaseDao,
         }
     }
 
-    //TODO: Implement a delete plant function
 
     /**
      * Navigation functions
      */
+
+    fun onRemovePlantClicked() {
+        viewModelScope.launch {
+            plantRepository.removeActivePlant(_currentPlant.value!!.id)
+        }
+    }
 
     /**
      * Function too map plant icons to name of current plant and set the ImageView resource

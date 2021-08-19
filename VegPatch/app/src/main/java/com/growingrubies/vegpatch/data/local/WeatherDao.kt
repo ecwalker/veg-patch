@@ -6,8 +6,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.growingrubies.vegpatch.data.dto.WeatherDTO
 
-//TODO: properly define today in Query
-const val TODAY = "2021-07-25"
 
 @Dao
 interface WeatherDatabaseDao {

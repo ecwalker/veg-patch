@@ -7,6 +7,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.growingrubies.vegpatch.R
+import com.growingrubies.vegpatch.settings.SettingsActivity
 import com.growingrubies.vegpatch.data.local.PlantDatabase
 import com.growingrubies.vegpatch.databinding.ActivityAddPlantBinding
 import com.growingrubies.vegpatch.overview.MainActivity
@@ -52,7 +53,6 @@ class AddPlantActivity: AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
 
-        //TODO: Set click listener to confirm selection and navigate to Overview Activity
         addPlantViewModel.navigateToMainActivity.observe(this, Observer {
             if (it) {
                 val contentIntent = Intent(applicationContext, MainActivity::class.java)
@@ -64,7 +64,7 @@ class AddPlantActivity: AppCompatActivity() {
     }
 
     /**
-     * Override functions
+     * Override functions for overflow menu navigation
      */
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -78,10 +78,19 @@ class AddPlantActivity: AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_settings -> {
+                navigateToSettings()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    private fun navigateToSettings() {
+        val intent = Intent(applicationContext, SettingsActivity::class.java)
+        startActivity(intent)
+    }
+
 
     /**
      * Additional Functions...

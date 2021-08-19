@@ -8,7 +8,7 @@ import com.growingrubies.vegpatch.data.Plant
 import com.growingrubies.vegpatch.data.dto.PlantDTO
 import com.growingrubies.vegpatch.data.dto.WeatherDTO
 
-@Database(entities = [PlantDTO::class, WeatherDTO::class], version = 3, exportSchema = false)
+@Database(entities = [PlantDTO::class, WeatherDTO::class], version = 5, exportSchema = false)
 abstract class PlantDatabase: RoomDatabase() {
 
     //Connect to DAOs

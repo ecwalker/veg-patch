@@ -24,7 +24,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
+                android:background="@color/primaryDarkColor"
                 app:popupTheme="@style/Theme.VegPatch.PopupOverlay" />
 
         </com.google.android.material.appbar.AppBarLayout>
@@ -36,20 +36,62 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/primaryColor">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/activePlantList_recyclerView"
+            <TextView
+                android:id="@+id/numPlants_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/weather_imageView"
+                android:layout_marginTop="18dp"
+                android:text="@string/plants_in_your_garden"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/white"/>
+
+            <TextView
+                android:id="@+id/numPlantsFigure_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/numPlants_textView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/weather_imageView"
+                android:layout_marginTop="8dp"
+                android:textSize="24sp"
+                tools:text="10"
+                android:textColor="@color/white"/>
+
+            <ImageView
+                android:id="@+id/weather_imageView"
+                android:layout_width="@dimen/icon_xy"
+                android:layout_height="@dimen/icon_xy"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                tools:src="@drawable/_37_summer"/>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/active_plant_list_item">
+                android:orientation="vertical">
 
-            </androidx.recyclerview.widget.RecyclerView>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/activePlantList_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/summary_bar_height"
+                    android:background="@color/white"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/active_plant_list_item">
+
+                </androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

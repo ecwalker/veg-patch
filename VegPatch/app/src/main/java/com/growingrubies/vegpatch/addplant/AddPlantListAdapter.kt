@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.growingrubies.vegpatch.R
 import com.growingrubies.vegpatch.data.Plant
 import com.growingrubies.vegpatch.databinding.PlantListItemBinding
 import com.growingrubies.vegpatch.overview.PlantListener
@@ -26,6 +27,24 @@ class AddPlantListAdapter(val clickListener: AddPlantListener): ListAdapter<Plan
 
         fun bind(clickListener: AddPlantListener, item: Plant) {
             binding.plant = item
+            binding.isAnnualImageView.let {
+                when (item.isAnnual) {
+                    true -> {it.setImageResource(R.drawable._30_hand_gloves)}
+                    false -> {it.setImageResource(R.drawable._01_tree)}
+                }
+            }
+            binding.isFrostHardyImageView.let {
+                when (item.isFrostHardy) {
+                    true -> {it.setImageResource(R.drawable._26_cold)}
+                    false -> {it.setImageResource(R.drawable.plant_covered)}
+                }
+            }
+            binding.isGreenhousePlantImageView.let {
+                when (item.isGreenhousePlant) {
+                    true -> {it.setImageResource(R.drawable._26_greenhouse)}
+                    false -> {it.setImageResource(R.drawable._20_gardening_tool)}
+                }
+            }
             binding.clickListener = clickListener
             binding.executePendingBindings()
         }

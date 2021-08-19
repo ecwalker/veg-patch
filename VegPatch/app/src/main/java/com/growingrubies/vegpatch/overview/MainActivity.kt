@@ -1,25 +1,23 @@
 package com.growingrubies.vegpatch.overview
 
-import android.app.Application
 import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.ui.AppBarConfiguration
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.Observer
 import com.growingrubies.vegpatch.R
+import com.growingrubies.vegpatch.settings.SettingsActivity
 import com.growingrubies.vegpatch.addplant.AddPlantActivity
 import com.growingrubies.vegpatch.data.local.PlantDatabase
-import com.growingrubies.vegpatch.data.local.PlantDatabaseDao
 import com.growingrubies.vegpatch.databinding.ActivityMainBinding
 import com.growingrubies.vegpatch.plantdetail.PlantDetailActivity
+import com.growingrubies.vegpatch.utils.WeatherCodes
+import com.growingrubies.vegpatch.weatherdetail.WeatherDetailActivity
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,10 +49,25 @@ class MainActivity : AppCompatActivity() {
             it?.let {
                 adapter.submitList(it)
             } ?: Timber.i("plantList LiveData is null")
+            binding.numPlantsFigureTextView.text = "${it.size}"
+        })
+
+        //Observe number of database returns, then set weather icon
+        overviewViewModel.dbReturns.observe(this, Observer {
+            if (it == 2) {
+                overviewViewModel.setWeatherImage(binding.weatherImageView,
+                    overviewViewModel.weatherForecast.value,
+                    overviewViewModel.plantList.value)
+            }
         })
 
         //Set up navigation elements
         setSupportActionBar(binding.toolbar)
+
+        binding.toolbar.setNavigationOnClickListener {
+            val intent = Intent(applicationContext, SettingsActivity::class.java)
+            startActivity(intent)
+        }
 
         overviewViewModel.navigateToPlantDetail.observe(this, Observer {
             val contentIntent = Intent(applicationContext, PlantDetailActivity::class.java).apply {
@@ -67,10 +80,19 @@ class MainActivity : AppCompatActivity() {
             val contentIntent = Intent(applicationContext, AddPlantActivity::class.java)
             startActivity(contentIntent)
         }
+
+        binding.weatherImageView.setOnClickListener {
+            overviewViewModel.currentWeatherCode.value?.let {
+                val currentWeatherString = setWeatherString(it)
+                val intent = WeatherDetailActivity.newIntent(this, currentWeatherString)
+                startActivity(intent)
+            }
+
+        }
     }
 
     /**
-     * Override functions
+     * Override functions for overflow menu navigation
      */
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -84,12 +106,32 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_settings -> {
+                navigateToSettings()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
+    private fun navigateToSettings() {
+        val intent = Intent(applicationContext, SettingsActivity::class.java)
+        startActivity(intent)
+    }
+
+
     /**
      * Additional Functions...
      */
+
+    private fun setWeatherString(weatherCode: WeatherCodes): String {
+        return when (weatherCode) {
+            is WeatherCodes.NoWarning -> getString(R.string.no_weather_warning)
+            is WeatherCodes.ColdWarning -> getString(R.string.cold_weather_warning)
+            is WeatherCodes.HeatWarning -> getString(R.string.heat_weather_warning)
+            is WeatherCodes.Unset -> getString(R.string.weather_warning_unset)
+        }
+    }
+
+
 }

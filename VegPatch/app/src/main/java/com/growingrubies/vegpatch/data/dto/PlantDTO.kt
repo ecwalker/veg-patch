@@ -9,11 +9,13 @@ import java.util.*
 data class PlantDTO (
     @PrimaryKey(autoGenerate = false) @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "category") val category: String,
     @ColumnInfo(name ="icon") val icon: String,
-    @ColumnInfo(name = "annual") val annual: Boolean,
-    @ColumnInfo(name = "frost_hardy") val frostHardy: Boolean,
+    @ColumnInfo(name = "is_annual") val isAnnual: Boolean,
+    @ColumnInfo(name = "is_frost_hardy") val isFrostHardy: Boolean,
+    @ColumnInfo(name = "is_greenhouse_plant") val isGreenhousePlant: Boolean,
     @ColumnInfo(name = "sow_date") val sowDate: String?,
     @ColumnInfo(name = "plant_date") val plantDate: String?,
     @ColumnInfo(name = "harvest_date") val harvestDate: String,
-    @ColumnInfo(name = "active_plant") val active: Boolean
+    @ColumnInfo(name = "is_active_plant") val isActive: Boolean
 )

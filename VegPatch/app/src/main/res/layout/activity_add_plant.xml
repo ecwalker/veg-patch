@@ -12,7 +12,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".overview.MainActivity">
+        tools:context=".addplant.AddPlantActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/overview_appBarLayout"
@@ -24,7 +24,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
+                android:background="@color/primaryDarkColor"
                 app:popupTheme="@style/Theme.VegPatch.PopupOverlay" />
 
         </com.google.android.material.appbar.AppBarLayout>

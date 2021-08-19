@@ -70,6 +70,12 @@ class PlantLocalRepository(private val plantDao: PlantDatabaseDao,
         }
     }
 
+    suspend fun removeActivePlant(id: Long) {
+        withContext(Dispatchers.IO) {
+            plantDao.removeActivePlant(id)
+        }
+    }
+
     /**
      * Functions to interact with WeatherDao
      */

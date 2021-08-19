@@ -33,10 +33,10 @@ Proof of concept
 
 Then add more data and add a polished UI
 [x] Add data for plants
-[] Add button in PlantDetailActivity and database function to delete an active plant
-[] Order plantList alphabetically?
-[] Update weather warning logic to check for active plants (that are not frost hardy)
-[] Add weather warning icon
+[x] Add button in PlantDetailActivity and database function to remove an active plant
+[x] Order plantList alphabetically
+[x] Add header in MainActivity with Summary (Num active plants) and weather summary icon
+[x] Update weather warning logic to check for active plants (that are not frost hardy)
 [] Implement weather warning activity
 
 

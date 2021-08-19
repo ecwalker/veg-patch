@@ -7,13 +7,10 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.growingrubies.vegpatch.R
-import com.growingrubies.vegpatch.addplant.AddPlantActivity
+import com.growingrubies.vegpatch.settings.SettingsActivity
 import com.growingrubies.vegpatch.data.local.PlantDatabase
-import com.growingrubies.vegpatch.databinding.ActivityMainBinding
 import com.growingrubies.vegpatch.databinding.ActivityPlantDetailBinding
-import com.growingrubies.vegpatch.overview.OverviewActivityViewModel
-import com.growingrubies.vegpatch.overview.OverviewListAdapter
-import com.growingrubies.vegpatch.overview.PlantListener
+import com.growingrubies.vegpatch.overview.MainActivity
 import timber.log.Timber
 
 class PlantDetailActivity: AppCompatActivity() {
@@ -37,16 +34,23 @@ class PlantDetailActivity: AppCompatActivity() {
         val plantDetailViewModel = PlantDetailViewModel(plantDao, weatherDao, application)
         binding.plantDetailViewModel = plantDetailViewModel
 
-        //binding.iconImageView.setImageResource(R.drawable._00_pumpkin)
-
-        //val idBundle = intent.getBundleExtra("plantId")
+        //Retrieve the current plant's info from database
         val idFromBundle = intent.getLongExtra("plantId", 0L)
         plantDetailViewModel.getPlantFromDatabase(idFromBundle)
 
-        //TODO: Fix null pointer exception, is _currentPlant not ready... use observer
+        //Set the icon depending on the current plant selected
         plantDetailViewModel.currentPlant.observe(this, Observer {
             plantDetailViewModel.mapImages(binding.iconImageView, it)
         })
+
+        //Listener for remove plant button
+        binding.removePlantButton.setOnClickListener {
+            //Set plant as inactive
+            plantDetailViewModel.onRemovePlantClicked()
+            //Navigate with intent
+            val contentIntent = Intent(applicationContext, MainActivity::class.java)
+            startActivity(contentIntent)
+        }
 
         //Set up navigation extra elements (ActionBar and FAB)
         setSupportActionBar(binding.toolbar)
@@ -54,7 +58,7 @@ class PlantDetailActivity: AppCompatActivity() {
     }
 
     /**
-     * Override functions
+     * Override functions for overflow menu navigation
      */
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -68,10 +72,19 @@ class PlantDetailActivity: AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_settings -> {
+                navigateToSettings()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    private fun navigateToSettings() {
+        val intent = Intent(applicationContext, SettingsActivity::class.java)
+        startActivity(intent)
+    }
+
 
     /**
      * Additional Functions...

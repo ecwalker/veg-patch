@@ -1,6 +1,7 @@
 package com.growingrubies.vegpatch.addplant
 
 import android.app.Application
+import android.widget.ImageView
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -42,7 +43,6 @@ class AddPlantViewModel(val plantDao: PlantDatabaseDao,
      */
     private fun setActivePlant(id: Long) {
         Timber.i("setPlantList called")
-        //TODO: function to set plant as active
         viewModelScope.launch {
             try {
                 plantDao.setPlantActive(id)
@@ -55,7 +55,6 @@ class AddPlantViewModel(val plantDao: PlantDatabaseDao,
     private fun getPlantlist() {
         Timber.i("getPlantList called")
         viewModelScope.launch {
-            //TODO: Change to retrieve only non-active plants
             val result = plantRepository.getAllPlants()
             when (result) {
                 is Result.Success<*> -> {
@@ -65,13 +64,15 @@ class AddPlantViewModel(val plantDao: PlantDatabaseDao,
                         Plant(
                             plant.id,
                             plant.name,
+                            plant.category,
                             plant.icon,
-                            plant.annual,
-                            plant.frostHardy,
+                            plant.isAnnual,
+                            plant.isFrostHardy,
+                            plant.isGreenhousePlant,
                             plant.sowDate,
                             plant.plantDate,
                             plant.harvestDate,
-                            plant.active
+                            plant.isActive
                         )
                     })
                     _plantList.value = dataList
@@ -90,9 +91,8 @@ class AddPlantViewModel(val plantDao: PlantDatabaseDao,
      */
 
     fun onPlantClicked(id: Long) {
-        //TODO: Action to confirm selection
         setActivePlant(id)
         _navigateToMainActivity.value = true
-
     }
+
 }

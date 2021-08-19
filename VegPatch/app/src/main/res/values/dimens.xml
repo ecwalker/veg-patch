@@ -1,3 +1,6 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="icon_xy">100dp</dimen>
+    <dimen name="summary_bar_height">116dp</dimen>
+    <dimen name="status_icon_xy">40dp</dimen>
 </resources>

@@ -8,13 +8,15 @@ import java.io.Serializable
 data class Plant(
     val id: Long,
     val name: String,
+    val category: String,
     val icon: String,
-    val annual: Boolean,
-    val frostHardy: Boolean,
+    val isAnnual: Boolean,
+    val isFrostHardy: Boolean,
+    val isGreenhousePlant: Boolean,
     val sowDate: String?,
     val plantDate: String?,
     val harvestDate: String,
-    var active: Boolean = false
+    var isActive: Boolean = false
 ): Serializable
 
 //Items for data class "Plant"

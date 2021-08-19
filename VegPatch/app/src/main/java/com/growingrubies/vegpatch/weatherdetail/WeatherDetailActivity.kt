@@ -6,9 +6,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.ui.AppBarConfiguration
 import com.growingrubies.vegpatch.R
-import com.growingrubies.vegpatch.data.Weather
+import com.growingrubies.vegpatch.settings.SettingsActivity
 import com.growingrubies.vegpatch.data.local.PlantDatabase
 import com.growingrubies.vegpatch.databinding.ActivityWeatherDetailBinding
 import timber.log.Timber
@@ -19,14 +18,13 @@ class WeatherDetailActivity : AppCompatActivity() {
         private const val EXTRA_WeatherDataItem = "EXTRA_WeatherDataItem"
 
         // Receive the weather object after the user clicks on the notification
-        fun newIntent(context: Context, weatherDataItem: Weather): Intent {
+        fun newIntent(context: Context, weatherInfoString: String): Intent {
             val intent = Intent(context, WeatherDetailActivity::class.java)
-            intent.putExtra(EXTRA_WeatherDataItem, weatherDataItem)
+            intent.putExtra(EXTRA_WeatherDataItem, weatherInfoString)
             return intent
         }
     }
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityWeatherDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,15 +44,21 @@ class WeatherDetailActivity : AppCompatActivity() {
         val weatherDetailViewModel = WeatherDetailViewModel(dataSource, weatherDataSource, application)
         binding.weatherDetailViewModel = weatherDetailViewModel
 
+        //Retrieve weather object from bundle
+        val weatherStringFromBundle = intent.getStringExtra(EXTRA_WeatherDataItem)
+            ?: getString(R.string.weather_warning_unset)
+
+        binding.weatherWarningTextView.text = weatherStringFromBundle
+        weatherDetailViewModel.setWeatherImage(binding.weatherImageView, weatherStringFromBundle)
+
 
         //Set up navigation elements
-        //TODO: Set up toolbar
-        //setSupportActionBar(binding.toolbar)
+        setSupportActionBar(binding.toolbar)
 
     }
 
     /**
-     * Override functions
+     * Override functions for overflow menu navigation
      */
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -68,10 +72,19 @@ class WeatherDetailActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_settings -> {
+                navigateToSettings()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    private fun navigateToSettings() {
+        val intent = Intent(applicationContext, SettingsActivity::class.java)
+        startActivity(intent)
+    }
+
 
     /**
      * Additional Functions...

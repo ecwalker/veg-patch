@@ -3,13 +3,31 @@
     <string name="action_settings">Settings</string>
 
     <!--Notification strings-->
-    <string name="notification_title">Notification Title</string>
+    <string name="notification_title">Extreme Weather Forecast</string>
     <string name="weather_notification_channel_id">weather_channel</string>
     <string name="weather_notification_channel_name">Weather</string>
     <string name="notification_button">More info</string>
     <string name="harvest">Harvest:</string>
     <string name="plant">Plant:</string>
     <string name="sow">Sow:</string>
+    <string name="remove_this_plant">Remove plant</string>
+    <string name="plants_in_your_garden">Plants in your garden:</string>
 
+    <!--Weather info strings-->
+    <string name="no_weather_warning">None of your plants are affected by the current weather conditions.</string>
+    <string name="cold_weather_warning">Cold weather is forecast. Some of your plants may need protecting.</string>
+    <string name="heat_weather_warning">Hot weather is forecast. Your plants may benefit from extra watering.</string>
+    <string name="weather_warning_unset">Unable to find weather information.</string>
+
+    <!--Settings strings -->
+    <string name="set_location">Go to settings to enter your location to enable weather notifications</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="hint_latitude">51.5071853</string>
+    <string name="hint_longitude">-0.1288274</string>
+    <string name="no_location_entered">Please fill in your location</string>
+    <string name="preference_file_key">com.growingrubies.vegpatch.PREFERENCE_FILE_KEY</string>
+    <string name="latitude_key">com.growingrubies.vegpatch.LATITUDE</string>
+    <string name="longitude_key">com.growingrubies.vegpatch.LONGITUDE</string>
 
 </resources>
