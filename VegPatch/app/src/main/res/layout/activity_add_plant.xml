@@ -52,6 +52,5 @@
             </androidx.recyclerview.widget.RecyclerView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

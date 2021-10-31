@@ -3,7 +3,6 @@ package com.growingrubies.vegpatch.overview
 import android.app.Application
 import android.content.Context
 import android.content.res.Resources
-import android.provider.Settings.Global.getString
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,11 +17,9 @@ import com.growingrubies.vegpatch.data.local.PlantDatabaseDao
 import com.growingrubies.vegpatch.data.local.PlantList
 import com.growingrubies.vegpatch.data.local.PlantLocalRepository
 import com.growingrubies.vegpatch.data.local.WeatherDatabaseDao
-import com.growingrubies.vegpatch.utils.Constants
 import com.growingrubies.vegpatch.utils.WeatherCodes
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.time.Month
 import java.util.*
 import java.util.Calendar.*
 import kotlin.collections.ArrayList
@@ -64,7 +61,6 @@ class OverviewActivityViewModel(
     init {
         setPlantList()
         getPlantlist()
-        getWeatherForecast()
         _dbReturns.value = 0
         _isAnyPlantNotFrostHardy.value = false
         _currentWeatherCode.value = WeatherCodes.Unset
@@ -156,30 +152,45 @@ class OverviewActivityViewModel(
      * Function to get weather forecast form database
      */
 
-    private fun getWeatherForecast() {
+    fun getWeatherForecast(activity: AppCompatActivity) {
         viewModelScope.launch {
-            try {
-                when (val result = plantRepository.getWeatherForecast()) {
-                    is Result.Success<*> -> {
-                        val data = result.data as WeatherDTO
-                        _weatherForecast.value = Weather(
-                            data.timeStamp,
-                            data.minTemp,
-                            data.maxTemp
-                        )
-                        Timber.i("Weather forecast is ${_weatherForecast.value}")
-                        _dbReturns.value = _dbReturns.value!!.plus(1)
+            var maxTries = 2
+            var countTries = 0
+            while (true) {
+                try {
+                    when (val result = plantRepository.getWeatherForecast()) {
+                        is Result.Success<*> -> {
+                            val data = result.data as WeatherDTO
+                            _weatherForecast.value = Weather(
+                                data.timeStamp,
+                                data.minTemp,
+                                data.maxTemp
+                            )
+                            Timber.i("Weather forecast is ${_weatherForecast.value}")
+                            _dbReturns.value = _dbReturns.value!!.plus(1)
+                            break
+                        }
+                        is Result.Error -> {
+                            countTries = countTries++
+                            Timber.i("Repository error on get WeatherForecast. Attempt $countTries")
+                            if (countTries >= maxTries) {
+                                break
+                            }
+                            else {
+                                Timber.i("Result object error: ${result.message}")
+                                val cityPref = activity.getString(R.string.preference_file_key)
+                                val cityKey = activity.getString(R.string.city_key)
+                                val sharedPref = activity.getSharedPreferences(cityPref, Context.MODE_PRIVATE)
+                                plantRepository.refreshWeatherForecast(sharedPref.getString(cityKey, null))
+                            }
+
+                        }
                     }
-                    is Result.Error -> {
-                        Timber.i("Result object error: ${result.message}")
-                        //TODO: Temp fix here, but will not load properly on fresh install
-                        //If weather forecast is empty then force call refresh??
-                        plantRepository.refreshWeatherForecast()
-                    }
+                } catch (e: Exception) {
+                    Timber.i("Exception: ${e.message}")
                 }
-            } catch (e: Exception) {
-                Timber.i("Exception: ${e.message}")
             }
+
 
         }
     }
@@ -188,22 +199,16 @@ class OverviewActivityViewModel(
      * Functions to check SharedPreferences and prompt user to update if not set
      */
 
-    fun checkSharedPreferences(activity: AppCompatActivity, context: Context) {
-
-        //Retrieve SharedPreferences
-        val latitudeKey = Resources.getSystem().getString(R.string.latitude_key)
-        val longitudeKey = Resources.getSystem().getString(R.string.longitude_key)
-        val sharedPref = activity.getPreferences(Context.MODE_PRIVATE)
-        val latitudeSharedPref = sharedPref.getString(latitudeKey, Constants.LAT)
-        val longitudeSharedPref = sharedPref.getString(longitudeKey, Constants.LONG)
-        Timber.i("Shared Preferences retrieved: $latitudeSharedPref and $longitudeSharedPref")
-
-        //Check whether SharedPreferences have been set
-        val isLatitudeSet = latitudeSharedPref != Constants.LAT
-        val isLongitudeSet = longitudeSharedPref != Constants.LONG
-        if (!isLatitudeSet && !isLongitudeSet) {
-            val setLocationReminder = Resources.getSystem().getString(R.string.set_location)
-            Toast.makeText(context, setLocationReminder, Toast.LENGTH_SHORT).show()
+    fun checkSharedPreferences(activity: AppCompatActivity) {
+        val cityPref = activity.getString(R.string.preference_file_key)
+        val cityKey = activity.getString(R.string.city_key)
+        val sharedPref = activity.getSharedPreferences(cityPref, Context.MODE_PRIVATE)
+        val city = sharedPref.getString(cityKey, null)
+        Timber.i("City key: $cityKey")
+        Timber.i("Shared pref: ${sharedPref.getString(cityKey, null)}")
+        if (city.isNullOrEmpty()) {
+            val cityPrompt = activity.getString(R.string.city_not_set)
+            Toast.makeText(activity, cityPrompt, Toast.LENGTH_LONG).show()
         }
     }
 
@@ -213,7 +218,6 @@ class OverviewActivityViewModel(
 
     fun setWeatherImage(imgView: ImageView, weather: Weather?, activePlantList: List<Plant>?) {
         Timber.i("setWeatherImage called")
-        //var isAnyPlantNotFrostHardy = false
         activePlantList?.let{
             for (plant in it) {
                 if (!plant.isFrostHardy) {
@@ -236,7 +240,7 @@ class OverviewActivityViewModel(
         } else {
             _currentWeatherCode.value = WeatherCodes.NoWarning
             val rightNow = Calendar.getInstance()
-            Timber.i("Calendar month: ${rightNow.get(MONTH)}")
+            Timber.i("Calendar month: ${rightNow.get(MONTH) + 1}")
             when (rightNow.get(MONTH)) {
                 JANUARY -> imgView.setImageResource(R.drawable._39_winter)
                 FEBRUARY -> imgView.setImageResource(R.drawable._39_winter)
@@ -258,6 +262,7 @@ class OverviewActivityViewModel(
     /**
      * Function to force update weather forecast due to change of location SharedPreference
      */
+
 
 
 }

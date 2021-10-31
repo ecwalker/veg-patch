@@ -18,122 +18,130 @@
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/overview_appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="155dp"
+            android:layout_marginTop="?attr/actionBarSize"
             android:theme="@style/Theme.VegPatch.AppBarOverlay">
+
+            <androidx.constraintlayout.motion.widget.MotionLayout
+                android:id="@+id/motionLayout"
+                app:layoutDescription="@xml/motion_scene"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                app:motionDebug="SHOW_PATH">
+
+                <ImageView
+                    android:id="@+id/background"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/vegpatch_seasons_header2" />
+
+                <ImageView
+                    android:id="@+id/icon_imageView"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    tools:layout_editor_absoluteX="49dp"
+                    tools:layout_editor_absoluteY="27dp"
+                    tools:srcCompat="@drawable/_00_pumpkin" />
+
+            </androidx.constraintlayout.motion.widget.MotionLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="?attr/actionBarSize"
             android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <TextView
-                android:id="@+id/name_textView"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
-                android:gravity="center"
-                android:text="@{plantDetailViewModel.currentPlant.name}"
-                android:textSize="32sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Plant Name" />
+                android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/icon_imageView"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="24dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/name_textView"
-                tools:layout_editor_absoluteX="20dp" />
+                <TextView
+                    android:id="@+id/name_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="36dp"
+                    android:gravity="center"
+                    android:text="@{plantDetailViewModel.currentPlant.name}"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    tools:text="Plant Name" />
 
-            <TextView
-                android:id="@+id/sow_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
-                android:text="@string/sow"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@+id/icon_imageView" />
+                <TextView
+                    android:id="@+id/sow_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="36dp"
+                    android:text="@string/sow"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/sowDate_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@{plantDetailViewModel.currentPlant.sowDate}"
-                android:textSize="24sp"
-                app:layout_constraintTop_toBottomOf="@+id/sow_textView"
-                tools:text="February to March" />
+                <TextView
+                    android:id="@+id/sowDate_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@{plantDetailViewModel.currentPlant.sowDate}"
+                    android:textSize="24sp"
+                    tools:text="February to March" />
 
-            <TextView
-                android:id="@+id/plant_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/plant"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@+id/sowDate_textView" />
+                <TextView
+                    android:id="@+id/plant_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/plant"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/plantDate_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@{plantDetailViewModel.currentPlant.plantDate}"
-                android:textSize="24sp"
-                app:layout_constraintTop_toBottomOf="@+id/plant_textView"
-                tools:text="After last frost" />
+                <TextView
+                    android:id="@+id/plantDate_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@{plantDetailViewModel.currentPlant.plantDate}"
+                    android:textSize="24sp"
+                    tools:text="After last frost" />
 
-            <TextView
-                android:id="@+id/harvest_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/harvest"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@+id/plantDate_textView" />
+                <TextView
+                    android:id="@+id/harvest_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/harvest"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/harvestDate_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@{plantDetailViewModel.currentPlant.harvestDate}"
-                android:textSize="24sp"
-                app:layout_constraintTop_toBottomOf="@+id/harvest_textView"
-                tools:text="June to August" />
+                <TextView
+                    android:id="@+id/harvestDate_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@{plantDetailViewModel.currentPlant.harvestDate}"
+                    android:textSize="24sp"
+                    tools:text="June to August" />
 
-            <Button
-                android:id="@+id/removePlant_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="@string/remove_this_plant"
-                android:textAllCaps="false"
-                android:textSize="18sp"
-                android:textColor="@color/secondaryExtraLightColor"
-                app:backgroundTint="@color/secondaryColor"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/harvestDate_textView" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <Button
+                    android:id="@+id/removePlant_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:text="@string/remove_this_plant"
+                    android:textAllCaps="false"
+                    android:textColor="@color/secondaryExtraLightColor"
+                    android:textSize="18sp"
+                    app:backgroundTint="@color/secondaryColor" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"

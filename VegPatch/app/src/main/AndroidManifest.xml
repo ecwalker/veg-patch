@@ -46,6 +46,11 @@
             android:theme="@style/Theme.VegPatch.NoActionBar" >
 
         </activity>
+
+        <meta-data
+            android:name="apiKey"
+            android:value="${API_KEY}"/>
+
     </application>
 
 </manifest>

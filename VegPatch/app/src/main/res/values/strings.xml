@@ -27,7 +27,32 @@
     <string name="hint_longitude">-0.1288274</string>
     <string name="no_location_entered">Please fill in your location</string>
     <string name="preference_file_key">com.growingrubies.vegpatch.PREFERENCE_FILE_KEY</string>
-    <string name="latitude_key">com.growingrubies.vegpatch.LATITUDE</string>
-    <string name="longitude_key">com.growingrubies.vegpatch.LONGITUDE</string>
+    <string name="city_key">com.growingrubies.vegpatch.CITY</string>
+    <string name="location">Location</string>
+    <string name="select_city">Select your nearest city</string>
+    <string name="no_city_selected">No city selected</string>
+    <string name="city_not_set">Please go to Settings to set your location</string>
+    
+    <!--Cities list for dropdown spinner in settings activity-->
+    <string-array name="cities_list">
+        <item>Aberdeen</item>
+        <item>Belfast</item>
+        <item>Brighton</item>
+        <item>Bristol</item>
+        <item>Cambridge</item>
+        <item>Cardiff</item>
+        <item>Edinburgh</item>
+        <item>Glasgow</item>
+        <item>Inverness</item>
+        <item>Leeds</item>
+        <item>Liverpool</item>
+        <item>London</item>
+        <item>Manchester</item>
+        <item>Newcastle</item>
+        <item>Oxford</item>
+        <item>Plymouth</item>
+        <item>Sheffield</item>
+        <item>Southampton</item>
+    </string-array>
 
 </resources>

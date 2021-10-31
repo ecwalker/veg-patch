@@ -1,6 +1,10 @@
 package com.growingrubies.vegpatch.data.local
 
+import android.app.Activity
 import android.app.NotificationManager
+import android.content.Context
+import android.content.res.Resources
+import com.growingrubies.vegpatch.R
 import com.growingrubies.vegpatch.data.Plant
 import com.growingrubies.vegpatch.data.dto.PlantDTO
 import kotlinx.coroutines.Dispatchers
@@ -80,11 +84,31 @@ class PlantLocalRepository(private val plantDao: PlantDatabaseDao,
      * Functions to interact with WeatherDao
      */
 
-    suspend fun refreshWeatherForecast() {
+    suspend fun refreshWeatherForecast(city: String?) {
         Timber.i("refreshWeatherForecast called")
         withContext(Dispatchers.IO) {
             try {
-                val stringResult = OpenWeatherApi.retrofitService.getWeather()
+                val stringResult = when (city) {
+                    "London" -> OpenWeatherApi.retrofitService.getLondonWeather()
+                    "Brighton" -> OpenWeatherApi.retrofitService.getBrightonWeather()
+                    "Oxford" -> OpenWeatherApi.retrofitService.getOxfordWeather()
+                    "Cambridge" -> OpenWeatherApi.retrofitService.getCambridgeWeather()
+                    "Southampton" -> OpenWeatherApi.retrofitService.getSouthamptonWeather()
+                    "Plymouth" -> OpenWeatherApi.retrofitService.getPlymouthWeather()
+                    "Cardiff" -> OpenWeatherApi.retrofitService.getCardiffWeather()
+                    "Bristol" -> OpenWeatherApi.retrofitService.getBristolWeather()
+                    "Liverpool" -> OpenWeatherApi.retrofitService.getLiverpoolWeather()
+                    "Sheffield" -> OpenWeatherApi.retrofitService.getSheffieldWeather()
+                    "Manchester" -> OpenWeatherApi.retrofitService.getManchesterWeather()
+                    "Leeds" -> OpenWeatherApi.retrofitService.getLeedsWeather()
+                    "Newcastle" -> OpenWeatherApi.retrofitService.getNewcastleWeather()
+                    "Glasgow" -> OpenWeatherApi.retrofitService.getGlasgowWeather()
+                    "Edinburgh" -> OpenWeatherApi.retrofitService.getEdinburghWeather()
+                    "Aberdeen" -> OpenWeatherApi.retrofitService.getAberdeenWeather()
+                    "Inverness" -> OpenWeatherApi.retrofitService.getInvernessWeather()
+                    "Belfast" -> OpenWeatherApi.retrofitService.getBelfastWeather()
+                    else -> OpenWeatherApi.retrofitService.getLondonWeather()
+                }
                 Timber.i("OpenWeatherAPI returned: $stringResult")
                 val result = parseOpenWeatherJson(JSONObject(stringResult))
                 Timber.i("Parsed weather result: $result")
@@ -108,6 +132,8 @@ class PlantLocalRepository(private val plantDao: PlantDatabaseDao,
         } catch (e: Exception) {
             Timber.i("Error: ${e.message}")
             Result.Error(e.localizedMessage)
+            //Parameter specified as non-null is null:
+            //method kotlin.jvm.internal.Intrinsics.checkNotNullParameter, parameter data
         }
     }
 

@@ -1,6 +1,8 @@
 package com.growingrubies.vegpatch
 
 import android.app.Application
+import android.content.Context
+import android.content.res.Resources
 import android.os.Build
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,9 +36,19 @@ class VegPatchApplication : Application() {
                 }
             }.build()
 
+        //Get shared preference (city)
+        val cityPref = this.getString(R.string.preference_file_key)
+        val cityKey = this.getString(R.string.city_key)
+        val sharedPref = this.getSharedPreferences(cityPref, Context.MODE_PRIVATE)
+
+        //Create Data object with city sharedPref
+        val cityData = Data.Builder().putString(cityKey, sharedPref.getString(cityKey, null))
+
+        //Build periodic work request
         val repeatingRequest
                 = PeriodicWorkRequestBuilder<RefreshDataWorker>(1, TimeUnit.DAYS)
             .setConstraints(constraints)
+            .setInputData(cityData.build())
             .build()
 
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(

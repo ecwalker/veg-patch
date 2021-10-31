@@ -1,5 +1,6 @@
 package com.growingrubies.vegpatch.utils
 
+import android.app.Activity
 import android.app.NotificationManager
 import android.content.Context
 import android.content.res.Resources
@@ -24,6 +25,10 @@ class RefreshDataWorker(private val plantDao: PlantDatabaseDao,
 ):
     CoroutineWorker(appContext, params) {
 
+    //Get input data
+    private val cityKey = Resources.getSystem().getString(R.string.city_key)
+    val cityData = inputData.getString(cityKey)
+
     val notificationManager = appContext
         .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -35,7 +40,8 @@ class RefreshDataWorker(private val plantDao: PlantDatabaseDao,
         var currentWeatherString: String? = null
 
         return try {
-            repository.refreshWeatherForecast()
+            Timber.i("Trying to refresh weather forecast")
+            repository.refreshWeatherForecast(cityData)
             when (val weatherResult = repository.getWeatherForecast()) {
                 is com.growingrubies.vegpatch.data.dto.Result.Success<*> -> {
                     val data = weatherResult.data as WeatherDTO

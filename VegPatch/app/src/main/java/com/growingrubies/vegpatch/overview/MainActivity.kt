@@ -1,10 +1,15 @@
 package com.growingrubies.vegpatch.overview
 
+import android.content.Context
 import android.content.Intent
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.growingrubies.vegpatch.R
 import com.growingrubies.vegpatch.settings.SettingsActivity
@@ -36,6 +41,9 @@ class MainActivity : AppCompatActivity() {
 
         val overviewViewModel = OverviewActivityViewModel(dataSource, weatherDataSource, application)
         binding.overviewViewModel = overviewViewModel
+
+        //Refresh weather
+        overviewViewModel.getWeatherForecast(this)
 
         //Set up recyclerview
         val adapter = OverviewListAdapter(PlantListener {
@@ -89,7 +97,12 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+
+        // Test and check shared preferences
+        overviewViewModel.checkSharedPreferences(this)
+
     }
+
 
     /**
      * Override functions for overflow menu navigation

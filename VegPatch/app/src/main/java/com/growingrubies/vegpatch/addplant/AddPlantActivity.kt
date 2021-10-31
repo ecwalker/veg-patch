@@ -91,9 +91,4 @@ class AddPlantActivity: AppCompatActivity() {
         startActivity(intent)
     }
 
-
-    /**
-     * Additional Functions...
-     */
-
 }

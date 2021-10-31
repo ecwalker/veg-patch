@@ -43,60 +43,39 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/latitude_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:text="@string/latitude"
-            android:textSize="20sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/latitude_editTextNumber"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/longitude_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:text="@string/longitude"
-            android:textSize="20sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/longitude_editTextNumber"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <EditText
-            android:id="@+id/latitude_editTextNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
-            android:ems="10"
-            android:hint="@string/hint_latitude"
-            android:inputType="numberSigned|numberDecimal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/latitude_textView"
-            app:layout_constraintTop_toBottomOf="@+id/settingsTitle_textView" />
-
-        <EditText
-            android:id="@+id/longitude_editTextNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:ems="10"
-            android:hint="@string/hint_longitude"
-            android:inputType="numberSigned|number|numberDecimal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/longitude_textView"
-            app:layout_constraintTop_toBottomOf="@+id/latitude_editTextNumber" />
-
         <Button
             android:id="@+id/save_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="300dp"
+            android:backgroundTint="@color/secondaryColor"
             android:text="Save"
             android:textColor="@color/secondaryExtraLightColor"
-            android:backgroundTint="@color/secondaryColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/selectCity_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:text="@string/select_city"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/longitude_editTextNumber" />
+            app:layout_constraintTop_toBottomOf="@+id/settingsTitle_textView" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="319dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="56dp"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toTopOf="@+id/save_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/selectCity_textView" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
